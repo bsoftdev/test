@@ -21,25 +21,6 @@
             --icon-bg: rgba(255, 255, 255, 0.1);
             --service-icon-bg: rgba(27, 117, 188, 0.2);
         }
-
-        /* Light Mode Variables */
-        body.light-mode {
-            --bg-gradient-start: #f5f7fa;
-            --bg-gradient-end: #e8eef5;
-            --dark: #f8f9fa;
-            --darker: #ffffff;
-            --text: #1a2332;
-            --text-gray: #5a6b7f;
-            --card-bg-start: rgba(255, 255, 255, 0.9);
-            --card-bg-end: rgba(248, 249, 250, 0.95);
-            --card-bg-hover-start: rgba(255, 255, 255, 1);
-            --card-bg-hover-end: rgba(248, 249, 250, 1);
-            --header-bg: rgba(255, 255, 255, 0.95);
-            --border-color: rgba(0, 0, 0, 0.1);
-            --icon-bg: rgba(27, 117, 188, 0.1);
-            --service-icon-bg: rgba(27, 117, 188, 0.1);
-        }
-
         * {
             margin: 0;
             padding: 0;
