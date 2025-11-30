@@ -117,55 +117,6 @@
             transform: translateY(-2px);
         }
 
-        /* Theme Toggle Button */
-        .theme-toggle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--icon-bg);
-            border: none;
-            color: var(--text);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            margin: 0 5px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .theme-toggle:hover {
-            background: var(--primary);
-            color: #ffffff;
-            transform: translateY(-2px) rotate(15deg);
-        }
-
-        .theme-toggle .sun-icon,
-        .theme-toggle .moon-icon {
-            position: absolute;
-            transition: var(--transition);
-        }
-
-        .theme-toggle .sun-icon {
-            opacity: 0;
-            transform: scale(0) rotate(-90deg);
-        }
-
-        .theme-toggle .moon-icon {
-            opacity: 1;
-            transform: scale(1) rotate(0deg);
-        }
-        body.light-mode .theme-toggle .sun-icon {
-            opacity: 1;
-            transform: scale(1) rotate(0deg);
-        }
-
-        body.light-mode .theme-toggle .moon-icon {
-            opacity: 0;
-            transform: scale(0) rotate(90deg);
-        }
-
         .login-btn {
             padding: 10px 24px;
             border-radius: 25px;
