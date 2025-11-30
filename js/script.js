@@ -1,26 +1,5 @@
         // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
         
-        // Check for saved theme preference or default to dark mode
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        if (currentTheme === 'light') {
-            body.classList.add('light-mode');
-        }
-
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('light-mode');
-            
-            // Save theme preference
-            const theme = body.classList.contains('light-mode') ? 'light' : 'dark';
-            localStorage.setItem('theme', theme);
-            
-            // Add rotation animation
-            themeToggle.style.transform = 'rotate(360deg)';
-            setTimeout(() => {
-                themeToggle.style.transform = '';
-            }, 400);
-        });
 
         // Mobile Navigation Active State
         const mobileNavItems = document.querySelectorAll('.nav-mobile-item');
