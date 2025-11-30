@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login / Registo - Minimalista</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #1b75bc;
+            --primary-dark: #155d94;
+            --primary-light: #e6f2ff;
+            --text: #222;
+            --text-light: #666;
+            --border: #dcdcdc;
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f7f7f7 0%, #e9f0f7 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            min-height: 580px;
+            transition: var(--transition);
+        }
+
+        @media (max-width: 780px) {
+            .container {
+                flex-direction: column;
+                max-width: 450px;
+                min-height: auto;
+            }
+        }
+
+        .form-container {
+            width: 50%;
+            overflow-y: auto; /* Permitir rolagem vertical */
+            position: relative;
+            max-height: 580px; /* Altura máxima para rolagem */
+        }
+
+        @media (max-width: 780px) {
+            .form-container {
+                width: 100%;
+                min-height: 500px;
+                max-height: none; /* Remover altura máxima em mobile */
+            }
+        }
+
+        .form-box {
+            width: 100%;
+            padding: 30px;
+            transition: var(--transition);
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .register {
+            display: none; /* Esconder o formulário de registro inicialmente */
+        }
+
+        .container.active .login {
+            display: none; /* Esconder login quando ativo */
+        }
+
+        .container.active .register {
+            display: block; /* Mostrar registro quando ativo */
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text);
+            position: relative;
+            display: inline-block;
+        }
+
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 15px;
+            margin-bottom: 32px;
+        }
+
+        .input-box {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #444;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            height: 38px;
+            padding: 0 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(27,117,188,0.15);
+            transform: translateY(-2px);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 40px;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        input:focus + .input-icon {
+            color: var(--primary);
+        }
+
+        .password-toggle {
+            cursor: pointer;
+        }
+
+        .btn {
+            width: 100%;
+            height: 50px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(27,117,188,0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+
+        .toggle-btn {
+            width: 100%;
+            height: 46px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 10px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-btn:hover {
+            background: #f8f9fa;
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .toggle-btn i {
+            margin-right: 8px;
+            transition: var(--transition);
+        }
+
+        .toggle-btn:hover i {
+            transform: translateX(-3px);
+        }
+
+        /* ---------- PAINEL DIREITO COM ANIMAÇÃO ---------- */
+        .right-panel {
+            width: 50%;
+            position: relative;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 40px;
+        }
+
+        @media (max-width: 780px) {
+            .right-panel { 
+                display: none; 
+            }
+        }
+
+        .right-content {
+            z-index: 3;
+            color: white;
+            text-align: center;
+            max-width: 80%;
+        }
+
+        .right-panel h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .right-panel p {
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .features {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .feature i {
+            margin-right: 12px;
+            font-size: 18px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* CANVAS das bolinhas */
+        #ballsCanvas {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            height:100%;
+        }
+
+        /* BORDA ANIMADA */
+        .border-animate {
+            position: absolute;
+            inset: 0;
+            border-radius: 0;
+            padding: 2px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .border-animate::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 2px;
+            background: conic-gradient(
+                rgba(255,255,255,0.8),
+                rgba(255,255,255,0.4),
+                rgba(255,255,255,0.2),
+                rgba(255,255,255,0.8)
+            );
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: spin 8s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
+        /* Feedback de validação */
+        .input-box.success input {
+            border-color: var(--success);
+            box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.2);
+        }
+
+        .input-box.error input {
+            border-color: var(--error);
+            box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+        }
+
+        .validation-message {
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .error .validation-message {
+            display: block;
+            color: var(--error);
+        }
+
+        .success .validation-message {
+            display: block;
+            color: var(--success);
+        }
+
+        /* Loading animation */
+        .btn-loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn-loading::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Floating animation for right panel */
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="container">
+
+        <!-- Painéis do Formulário (esquerda) -->
+        <div class="form-container">
+            <div class="form-box login">
+                <h1 class="title">Entrar</h1>
+                <p class="subtitle">Acede à tua conta</p>
+
+                <div class="input-box">
+                    <label>Email</label>
+                    <input type="email" placeholder="teuemail@gmail.com" required id="loginEmail">
+                    <i class="input-icon fas fa-envelope"></i>
+                    <div class="validation-message"></div>
+                </div>
+
+                <div class="input-box">
+                    <label>Senha</label>
+                    <input type="password" placeholder="••••••••" required id="loginPassword">
+                    <i class="input-icon password-toggle fas fa-eye"></i>
+                    <div class="validation-message"></div>
+                </div>
+
+                <button class="btn" id="loginBtn">Entrar</button>
+                <button class="toggle-btn" id="showRegister">
+                    <i class="fas fa-user-plus"></i> Criar conta
+                </button>
+            </div>
+
+            <!-- REGISTER -->
+            <div class="form-box register">
+                <h1 class="title">Criar Conta</h1>
+                <p class="subtitle">Regista-te em segundos</p>
+
+                <div class="input-box">
+                    <label>Nome completo</label>
+                    <input type="text" placeholder="O teu nome" required id="registerName">
+                    <i class="input-icon fas fa-user"></i>
+                    <div class="validation-message"></div>
+                </div>
+
+                <div class="input-box">
+                    <label>Email</label>
+                    <input type="email" placeholder="email@gmail.com" required id="registerEmail">
+                    <i class="input-icon fas fa-envelope"></i>
+                    <div class="validation-message"></div>
+                </div>
+
+           
+
+                <div class="input-box">
+                    <label>Gênero</label>
+                    <select id="registerGender">
+                        <option selected disabled>Selecionar</option>
+                        <option>Masculino</option>
+                        <option>Feminino</option>
+                    </select>
+                    <i class="input-icon fas fa-chevron-down"></i>
+                </div>
+
+                <div class="input-box">
+                    <label>Senha</label>
+                    <input type="password" placeholder="Criar senha" required id="registerPassword">
+                    <i class="input-icon password-toggle fas fa-eye"></i>
+                    <div class="validation-message"></div>
+                </div>
+
+                <button class="btn" id="registerBtn">Criar Conta</button>
+                <button class="toggle-btn" id="showLogin">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+            </div>
+        </div>
+
+        <!-- PAINEL DIREITO COM BOLINHAS E BORDA -->
+        <div class="right-panel">
+            <canvas id="ballsCanvas"></canvas>
+            <div class="border-animate"></div>
+            <div class="right-content floating">
+                <h2>Bem-vindo de volta!</h2>
+                <p>Entre na sua conta ou crie uma nova para aceder a todos os recursos da nossa plataforma.</p>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Prestação de serviço</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-sync"></i>
+                        <span>Desenvolvimento de site e app</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Mentoria de TI</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* Alternância Login <-> Register com animação */
+        const container = document.getElementById("container");
+        document.getElementById("showRegister").onclick = () => {
+            container.classList.add("active");
+        };
+        document.getElementById("showLogin").onclick = () => {
+            container.classList.remove("active");
+        };
+
+        /* ------------------ BOLINHAS FLUTUANTES COM REPELÊNCIA ------------------ */
+        const canvas = document.getElementById("ballsCanvas");
+        const ctx = canvas.getContext("2d");
+        let w, h;
+
+        function resizeCanvas() {
+            w = canvas.width = canvas.offsetWidth;
+            h = canvas.height = canvas.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+
+        class Ball {
+            constructor() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.radius = 6 + Math.random() * 8;
+                this.color = "rgba(255,255,255,0.15)";
+                this.vx = (Math.random() - 0.5) * 1.2;
+                this.vy = (Math.random() - 0.5) * 1.2;
+                this.originalRadius = this.radius;
+            }
+
+            update(balls, mouse) {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > w) this.vx *= -1;
+                if (this.y < 0 || this.y > h) this.vy *= -1;
+
+                // Repelência entre bolinhas
+                balls.forEach(ball => {
+                    if (ball === this) return;
+                    const dx = this.x - ball.x;
+                    const dy = this.y - ball.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < this.radius + ball.radius + 20) {
+                        const force = 0.04;
+                        this.vx += (dx / dist) * force;
+                        this.vy += (dy / dist) * force;
+                    }
+                });
+
+                // Interação com o mouse
+                if (mouse.x && mouse.y) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < 100) {
+                        const force = 0.1;
+                        this.vx += (dx / dist) * force;
+                        this.vy += (dy / dist) * force;
+                        this.radius = this.originalRadius * 1.5;
+                    } else {
+                        this.radius = this.originalRadius;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        const balls = [];
+        for (let i = 0; i < 22; i++) balls.push(new Ball());
+
+        // Mouse interaction
+        const mouse = { x: null, y: null };
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        function animate() {
+            ctx.clearRect(0, 0, w, h);
+
+            balls.forEach(b => {
+                b.update(balls, mouse);
+                b.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        /* ------------------ VALIDAÇÃO DE FORMULÁRIOS ------------------ */
+        // Toggle de visibilidade de senha
+        document.querySelectorAll('.password-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    this.classList.remove('fa-eye');
+                    this.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    this.classList.remove('fa-eye-slash');
+                    this.classList.add('fa-eye');
+                }
+            });
+        });
+
+        // Validação de email
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Validação de senha
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+
+        // Validação em tempo real
+        document.getElementById('loginEmail').addEventListener('blur', function() {
+            const parent = this.parentElement;
+            if (validateEmail(this.value)) {
+                parent.classList.remove('error');
+                parent.classList.add('success');
+                parent.querySelector('.validation-message').textContent = 'Email válido';
+            } else {
+                parent.classList.remove('success');
+                parent.classList.add('error');
+                parent.querySelector('.validation-message').textContent = 'Por favor, insira um email válido';
+            }
+        });
+
+        document.getElementById('loginPassword').addEventListener('blur', function() {
+            const parent = this.parentElement;
+            if (validatePassword(this.value)) {
+                parent.classList.remove('error');
+                parent.classList.add('success');
+                parent.querySelector('.validation-message').textContent = 'Senha válida';
+            } else {
+                parent.classList.remove('success');
+                parent.classList.add('error');
+                parent.querySelector('.validation-message').textContent = 'A senha deve ter pelo menos 6 caracteres';
+            }
+        });
+
+        // Validação do formulário de registro
+        document.getElementById('registerEmail').addEventListener('blur', function() {
+            const parent = this.parentElement;
+            if (validateEmail(this.value)) {
+                parent.classList.remove('error');
+                parent.classList.add('success');
+                parent.querySelector('.validation-message').textContent = 'Email válido';
+            } else {
+                parent.classList.remove('success');
+                parent.classList.add('error');
+                parent.querySelector('.validation-message').textContent = 'Por favor, insira um email válido';
+            }
+        });
+
+        document.getElementById('registerPassword').addEventListener('blur', function() {
+            const parent = this.parentElement;
+            if (validatePassword(this.value)) {
+                parent.classList.remove('error');
+                parent.classList.add('success');
+                parent.querySelector('.validation-message').textContent = 'Senha válida';
+            } else {
+                parent.classList.remove('success');
+                parent.classList.add('error');
+                parent.querySelector('.validation-message').textContent = 'A senha deve ter pelo menos 6 caracteres';
+            }
+        });
+
+        // Simulação de envio de formulário com loading
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!validateEmail(email) || !validatePassword(password)) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+            
+            this.classList.add('btn-loading');
+            setTimeout(() => {
+                this.classList.remove('btn-loading');
+                alert('Login realizado com sucesso!');
+            }, 1500);
+        });
+
+        document.getElementById('registerBtn').addEventListener('click', function() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            if (!name || !validateEmail(email) || !validatePassword(password)) {
+                alert('Por favor, preencha todos os campos obrigatórios corretamente.');
+                return;
+            }
+            
+            this.classList.add('btn-loading');
+            setTimeout(() => {
+                this.classList.remove('btn-loading');
+                alert('Conta criada com sucesso!');
+                container.classList.remove('active');
+            }, 1500);
+        });
+    </script>
+
+</body>
+</html>
