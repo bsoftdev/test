@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login / Registo - Minimalista</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estilo.css">
+  </head>
+<body>
+
+    <div class="container" id="container">
+
+        <!-- Painéis do Formulário (esquerda) -->
+        <div class="form-container">
+            <a href="../index.html" class="back-btn">
+    <i class="fas fa-arrow-left"></i>
+</a>
+
+            <div class="form-box login">
+                <h1 class="title">Entrar</h1>
+                <p class="subtitle">Acede à tua conta</p>
+<form action="a.php" method="post" id="loginForm">
+    <div class="input-box">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="teuemail@gmail.com" required id="loginEmail">
+        <i class="input-icon fas fa-envelope"></i>
+        <div class="validation-message"></div>
+    </div>
+
+    <div class="input-box">
+        <label>Senha</label>
+        <input type="password" name="senha" placeholder="••••••••" required id="loginPassword">
+        <i class="input-icon password-toggle fas fa-eye"></i>
+        <div class="validation-message"></div>
+    </div>
+
+    <button class="btn login-btn" id="loginBtn" type="submit">Entrar</button>
+</form>
+                <button class="toggle-btn" id="showRegister">
+                    <i class="fas fa-user-plus"></i> Criar conta
+                </button>
+            </div>
+
+            <!-- REGISTER -->
+            <div class="form-box register">
+                <h1 class="title">Criar Conta</h1>
+                <p class="subtitle">Regista-te em segundos</p>
+<form action="registo.php" method="post" id="registerForm">
+
+    <div class="input-box">
+        <label>Nome completo</label>
+        <input type="text" name="nome" placeholder="O teu nome" required id="registerName">
+        <i class="input-icon fas fa-user"></i>
+        <div class="validation-message"></div>
+    </div>
+
+    <div class="input-box">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="email@gmail.com" required id="registerEmail">
+        <i class="input-icon fas fa-envelope"></i>
+        <div class="validation-message"></div>
+    </div>
+
+    <div class="input-box">
+        <label>Gênero</label>
+        <select id="registerGender" name="genero" required>
+            <option selected disabled value="">Selecionar</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Feminino">Feminino</option>
+        </select>
+        <i class="input-icon fas fa-chevron-down"></i>
+        <div class="validation-message"></div>
+    </div>
+
+    <div class="input-box">
+        <label>Senha</label>
+        <input type="password" name="senha" placeholder="Criar senha" required id="registerPassword">
+        <i class="input-icon password-toggle fas fa-eye"></i>
+        <div class="validation-message"></div>
+    </div>
+
+    <button class="btn" id="registerBtn" type="submit">Criar Conta</button>
+</form>
+
+            
+                <button class="toggle-btn" id="showLogin">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+            </div>
+        </div>
+
+        <!-- PAINEL DIREITO COM BOLINHAS E BORDA -->
+        <div class="right-panel">
+            <canvas id="ballsCanvas"></canvas>
+            <div class="border-animate"></div>
+            <div class="right-content floating">
+                <h2>Bem-vindo de volta!</h2>
+                <p>Entre na sua conta ou crie uma nova para aceder a todos os recursos da nossa plataforma.</p>
+                
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Prestação de serviço</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-sync"></i>
+                        <span>Desenvolvimento de site e app</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Mentoria de TI</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+   <script src="script.js"></script>
+</body>
+</html>

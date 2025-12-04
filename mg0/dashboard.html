@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Tech Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        
+        :root {
+            --primary: #1b75bc;
+            --dark: #2a3f5f;
+            --darker: #1a2332;
+            --text: #ffffff;
+            --text-gray: #a8b2d1;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            
+            /* Dark Mode Variables */
+            --bg-gradient-start: #1a2332;
+            --bg-gradient-end: #2a3f5f;
+            --card-bg-start: rgba(42, 63, 95, 0.6);
+            --card-bg-end: rgba(26, 35, 50, 0.8);
+            --card-bg-hover-start: rgba(42, 63, 95, 0.8);
+            --card-bg-hover-end: rgba(26, 35, 50, 0.95);
+            --header-bg: rgba(26, 35, 50, 0.95);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --icon-bg: rgba(255, 255, 255, 0.1);
+            --service-icon-bg: rgba(27, 117, 188, 0.2);
+            --sidebar-width: 250px;
+        }
+
+        /* Light Mode Variables */
+        .light-mode {
+            --bg-gradient-start: #f0f4f8;
+            --bg-gradient-end: #e1e8f0;
+            --card-bg-start: rgba(255, 255, 255, 0.8);
+            --card-bg-end: rgba(255, 255, 255, 0.9);
+            --card-bg-hover-start: rgba(255, 255, 255, 0.95);
+            --card-bg-hover-end: rgba(255, 255, 255, 1);
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --border-color: rgba(0, 0, 0, 0.1);
+            --icon-bg: rgba(0, 0, 0, 0.05);
+            --service-icon-bg: rgba(27, 117, 188, 0.1);
+            --text: #2a3f5f;
+            --text-gray: #5a6c8a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            color: var(--text);
+            overflow-x: hidden;
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        /* Layout Principal */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar para Desktop */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border-color);
+            transition: var(--transition);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .sidebar-nav {
+            padding: 0 15px;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: var(--text-gray);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(27, 117, 188, 0.2);
+            color: var(--primary);
+        }
+
+        .nav-link i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Conteúdo Principal */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+        }
+
+        /* Header do Conteúdo Principal */
+        .top-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: var(--sidebar-width);
+            z-index: 999;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 30px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-form {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 15px 10px 45px;
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            background: var(--icon-bg);
+            color: var(--text);
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(27, 117, 188, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-gray);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 20px;
+            transition: var(--transition);
+            padding: 8px;
+            border-radius: 50%;
+        }
+
+        .theme-toggle:hover {
+            background: var(--icon-bg);
+            transform: rotate(15deg);
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            padding: 100px 30px 50px;
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-title {
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, #a8b2d1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .light-mode .dashboard-title {
+            background: linear-gradient(135deg, #2a3f5f 0%, #5a6c8a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dashboard-card {
+            background: linear-gradient(135deg, var(--card-bg-start) 0%, var(--card-bg-end) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 25px;
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(27, 117, 188, 0.3);
+            border-color: var(--primary);
+        }
+
+        .stat-card {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--service-icon-bg);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover .stat-icon {
+            background: var(--primary);
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-gray);
+        }
+
+        .stat-change {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-top: 8px;
+        }
+
+        .stat-change.positive {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .stat-change.negative {
+            background: rgba(244, 67, 54, 0.2);
+            color: #F44336;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--primary);
+        }
+
+        /* Table Styles */
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: var(--text);
+        }
+
+        .custom-table thead {
+            background: var(--service-icon-bg);
+        }
+
+        .custom-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .custom-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        .custom-table tbody tr {
+            transition: var(--transition);
+        }
+
+        .custom-table tbody tr:hover {
+            background: var(--service-icon-bg);
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-open {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FF9800;
+        }
+
+        .status-in-progress {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
+        }
+
+        .status-resolved {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .status-pending {
+            background: rgba(156, 39, 176, 0.2);
+            color: #9C27B0;
+        }
+
+        /* Mobile Navigation */
+        .nav-mobile {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--header-bg);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-color);
+            padding: 12px 0;
+            z-index: 1000;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-mobile-content {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-mobile-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 11px;
+            transition: var(--transition);
+            padding: 8px 12px;
+            border-radius: 12px;
+            min-width: 60px;
+        }
+
+        .nav-mobile-item i {
+            font-size: 22px;
+        }
+
+        .nav-mobile-item.active {
+            color: var(--primary);
+            background: rgba(27, 117, 188, 0.1);
+        }
+
+        /* Footer */
+        .footer-section {
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            padding: 40px 0 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-widget {
+            margin-bottom: 30px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .footer-description {
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(27, 117, 188, 0.2);
+            border: 1px solid rgba(27, 117, 188, 0.3);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            color: var(--text);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(27, 117, 188, 0.4);
+        }
+
+        .footer-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 8px;
+        }
+
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a::before {
+            content: '\f105';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--primary);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 8px;
+        }
+
+        .footer-links a:hover::before {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .footer-contact {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-contact li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        .footer-contact i {
+            color: var(--primary);
+            font-size: 14px;
+            margin-top: 3px;
+            min-width: 16px;
+        }
+
+        .footer-bottom {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-copyright {
+            color: var(--text-gray);
+            font-size: 13px;
+            margin: 0;
+            text-align: center;
+        }
+
+        .footer-copyright strong {
+            color: var(--primary);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 991px) {
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 1001;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .top-header {
+                left: 0;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-mobile {
+                display: block;
+            }
+            
+            .dashboard-section {
+                padding-top: 80px;
+                padding-bottom: 80px;
+            }
+            
+            .dashboard-card {
+                padding: 20px;
+            }
+            
+            .stat-value {
+                font-size: 24px;
+            }
+            
+            .top-header {
+                padding: 15px 20px;
+            }
+            
+            .search-container {
+                max-width: 100%;
+                margin: 0 15px;
+            }
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+        
+        .mobile-menu-toggle:hover {
+            background: var(--icon-bg);
+        }
+        
+        @media (max-width: 991px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar para Desktop -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-microchip"></i>
+                    <span>Magic Brain</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                </div>
+                 <div class="nav-item">
+                    <a href="dashboard.html" class="nav-link active">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Perfil</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="servico.html" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Serviços</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="projeto.html" class="nav-link">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>Projetos</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="blog.html" class="nav-link">
+                        <i class="fas fa-blog"></i>
+                        <span>Blog</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="sobre.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Sobre</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="sair.html" class="nav-link">
+                        <i class="fas fa-user-circle"></i>
+                        <span>sair</span>
+                    </a>
+                </div> 
+               
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                
+                <div class="search-container">
+                    <form class="search-form">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Pesquisar...">
+                    </form>
+                </div>
+                
+                <div class="user-menu">
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <img src="https://scontent.flad8-2.fna.fbcdn.net/v/t1.6435-9/91882629_1104044086648657_1576306689018167296_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeHa40nn20BIbCHUIE63SXSSYEUhiV2jUR1gRSGJXaNRHQ4yp2DnWfexSPUIZX613jAHjo3D1FI5RRVCWRSG9DmV&_nc_ohc=04pvJuvkZhYQ7kNvwFXEmZj&_nc_oc=AdkJdzNb77gY5hD-wPjKhChqdOTXQh87iK6QmmRA1AZsF9UAOn9y7mPZ77IvmPYH8C0&_nc_zt=23&_nc_ht=scontent.flad8-2.fna&_nc_gid=5fSL0AifLphZI7Y6GiHvIw&oh=00_AfiuaIBv5-RpqNuqWbp53cZ3ONetNnU9qEIaBdxnu9LEeA&oe=6953BEA8" alt="Usuário" class="user-avatar">
+                </div>
+            </header>
+
+             <!-- Dashboard Section -->
+    <section class="dashboard-section">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Dashboard</h1>
+                <div class="d-flex gap-3">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-calendar-alt me-2"></i>Últimos 30 dias
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Hoje</a></li>
+                            <li><a class="dropdown-item" href="#">Últimos 7 dias</a></li>
+                            <li><a class="dropdown-item" href="#">Últimos 30 dias</a></li>
+                            <li><a class="dropdown-item" href="#">Últimos 90 dias</a></li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-download me-2"></i>Exportar
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Cards de Métricas -->
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="dashboard-card stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-value">$2,500</div>
+                        <div class="stat-label">Vendas Líquidas</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up me-1"></i>12.5%
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="dashboard-card stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div class="stat-value">2/40</div>
+                        <div class="stat-label">Tickets Vendidos</div>
+                        <div class="stat-change negative">
+                            <i class="fas fa-arrow-down me-1"></i>5.2%
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="dashboard-card stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <div class="stat-value">0/40</div>
+                        <div class="stat-label">Add-ons Vendidos</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up me-1"></i>8.7%
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="dashboard-card stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="stat-value">200K</div>
+                        <div class="stat-label">Visualizações</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up me-1"></i>15.3%
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Gráficos -->
+                <div class="col-lg-8 mb-4">
+                    <div class="dashboard-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-bar"></i>
+                            Número de Tickets / Semana
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="ticketsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="dashboard-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-pie"></i>
+                            Estatísticas de Eventos
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="eventsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="dashboard-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-line"></i>
+                            Estatísticas de Lucro
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="profitChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="dashboard-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-area"></i>
+                            Fontes de Vendas
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Chamados de Suporte -->
+                <div class="col-lg-6 mb-4">
+                    <div class="dashboard-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-headset"></i>
+                            Chamados de Suporte
+                        </h3>
+                        <div class="table-responsive">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Assunto</th>
+                                        <th>Status</th>
+                                        <th>Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#TS-001</td>
+                                        <td>Problema com servidor</td>
+                                        <td><span class="status-badge status-in-progress">Em Andamento</span></td>
+                                        <td>15/06/2024</td>
+                                    </tr>
+                                    <tr>
+                                        <td>#TS-002</td>
+                                        <td>Configuração de rede</td>
+                                        <td><span class="status-badge status-resolved">Resolvido</span></td>
+                                        <td>14/06/2024</td>
+                                    </tr>
+                                    <tr>
+                                        <td>#TS-003</td>
+                                        <td>Atualização de software</td>
+                                        <td><span class="status-badge status-open">Aberto</span></td>
+                                        <td>13/06/2024</td>
+                                    </tr>
+                                    <tr>
+                                        <td>#TS-004</td>
+                                        <td>Problema de backup</td>
+                                        <td><span class="status-badge status-pending">Pendente</span></td>
+                                        <td>12/06/2024</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Downloads de Softwares -->
+                <div class="col-lg-6 mb-4">
+                    <div class="dashboard-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-download"></i>
+                            Downloads de Softwares
+                        </h3>
+                        <div class="table-responsive">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Software</th>
+                                        <th>Versão</th>
+                                        <th>Downloads</th>
+                                        <th>Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Security Suite</td>
+                                        <td>v2.5.1</td>
+                                        <td>1,245</td>
+                                        <td><button class="btn btn-sm btn-outline-primary">Download</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Network Monitor</td>
+                                        <td>v1.8.3</td>
+                                        <td>892</td>
+                                        <td><button class="btn btn-sm btn-outline-primary">Download</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Backup Manager</td>
+                                        <td>v3.2.0</td>
+                                        <td>567</td>
+                                        <td><button class="btn btn-sm btn-outline-primary">Download</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Performance Tool</td>
+                                        <td>v2.1.4</td>
+                                        <td>1,034</td>
+                                        <td><button class="btn btn-sm btn-outline-primary">Download</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Pagamento de Serviços -->
+                <div class="col-lg-6 mb-4">
+                    <div class="dashboard-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-credit-card"></i>
+                            Pagamento de Serviços
+                        </h3>
+                        <div class="table-responsive">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Serviço</th>
+                                        <th>Valor</th>
+                                        <th>Vencimento</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Hospedagem Premium</td>
+                                        <td>$299,00</td>
+                                        <td>20/06/2024</td>
+                                        <td><span class="status-badge status-resolved">Pago</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Suporte 24/7</td>
+                                        <td>$150,00</td>
+                                        <td>15/06/2024</td>
+                                        <td><span class="status-badge status-open">Pendente</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Backup em Nuvem</td>
+                                        <td>$89,00</td>
+                                        <td>10/06/2024</td>
+                                        <td><span class="status-badge status-resolved">Pago</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Monitoramento</td>
+                                        <td>$120,00</td>
+                                        <td>05/06/2024</td>
+                                        <td><span class="status-badge status-resolved">Pago</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Histórico do Cliente -->
+                <div class="col-lg-6 mb-4">
+                    <div class="dashboard-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-history"></i>
+                            Histórico do Cliente
+                        </h3>
+                        <div class="table-responsive">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Ação</th>
+                                        <th>Detalhes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>15/06/2024</td>
+                                        <td>Chamado Aberto</td>
+                                        <td>Problema com servidor</td>
+                                    </tr>
+                                    <tr>
+                                        <td>14/06/2024</td>
+                                        <td>Download</td>
+                                        <td>Security Suite v2.5.1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12/06/2024</td>
+                                        <td>Pagamento</td>
+                                        <td>Hospedagem Premium</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10/06/2024</td>
+                                        <td>Contrato Renovado</td>
+                                        <td>Suporte 24/7</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard de Serviços Contratados -->
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="dashboard-card">
+                        <h3 class="card-title">
+                            <i class="fas fa-cubes"></i>
+                            Dashboard de Serviços Contratados
+                        </h3>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <div class="dashboard-card stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-server"></i>
+                                    </div>
+                                    <div class="stat-value">5</div>
+                                    <div class="stat-label">Servidores</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="dashboard-card stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-database"></i>
+                                    </div>
+                                    <div class="stat-value">12</div>
+                                    <div class="stat-label">Bancos de Dados</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="dashboard-card stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div class="stat-value">3</div>
+                                    <div class="stat-label">Firewalls</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="dashboard-card stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-cloud"></i>
+                                    </div>
+                                    <div class="stat-value">8</div>
+                                    <div class="stat-label">APIs</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  
+            <!-- Footer -->
+            <footer class="footer-section">
+                <div class="container">
+                    <div class="row g-4">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="footer-widget">
+                                <a href="index.html" class="footer-logo">
+                                    <i class="fas fa-microchip"></i>
+                                    <span>Tech Solutions</span>
+                                </a>
+                                <p class="footer-description">
+                                    Transformando negócios através da tecnologia com soluções inovadoras e personalizadas para o sucesso da sua empresa.
+                                </p>
+                                <div class="footer-social">
+                                    <a href="#" class="social-link">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                    <a href="#" class="social-link">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                    <a href="#" class="social-link">
+                                        <i class="fab fa-linkedin-in"></i>
+                                    </a>
+                                    <a href="#" class="social-link">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-6">
+                            <div class="footer-widget">
+                                <h4 class="footer-title">Links Rápidos</h4>
+                                <ul class="footer-links">
+                                    <li><a href="index.html">Home</a></li>
+                                    <li><a href="index.html#services">Serviços</a></li>
+                                    <li><a href="index.html#about">Sobre</a></li>
+                                    <li><a href="index.html#contact">Contacto</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6">
+                            <div class="footer-widget">
+                                <h4 class="footer-title">Serviços</h4>
+                                <ul class="footer-links">
+                                    <li><a href="index.html#services">Desenvolvimento Web</a></li>
+                                    <li><a href="index.html#services">Apps Mobile</a></li>
+                                    <li><a href="index.html#services">Redes & Infraestrutura</a></li>
+                                    <li><a href="index.html#services">Consultoria TI</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6">
+                            <div class="footer-widget">
+                                <h4 class="footer-title">Contacto</h4>
+                                <ul class="footer-contact">
+                                    <li>
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>Luanda, Angola</span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-phone"></i>
+                                        <span>+244 923 456 789</span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-envelope"></i>
+                                        <span>info@techsolutions.ao</span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-clock"></i>
+                                        <span>Seg - Sex: 8:00 - 18:00</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="footer-bottom">
+                        <p class="footer-copyright">
+                            © 2024 <strong>Tech Solutions</strong>. Todos os direitos reservados.
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <nav class="nav-mobile">
+        <div class="nav-mobile-content container">
+            <a href="index.html" class="nav-mobile-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="index.html#services" class="nav-mobile-item">
+                <i class="fas fa-cog"></i>
+                <span>Serviços</span>
+            </a>
+             <a href="dashboard.html" class="nav-mobile-item active">
+                <i class="fas fa-user-circle"></i>
+                <span>perfil</span>
+            </a>
+            <a href="index.html#about" class="nav-mobile-item">
+                <i class="fas fa-project-diagram"></i>
+                <span>Projeto</span>
+            </a>
+            <a href="index.html#contact" class="nav-mobile-item">
+                <i class="fas fa-blog"></i>
+                <span>Blog</span>
+            </a>
+           
+        </div>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Check for saved theme preference or default to dark mode
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        if (currentTheme === 'light') {
+            body.classList.add('light-mode');
+            updateThemeIcon('light');
+        } else {
+            updateThemeIcon('dark');
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = document.querySelector('.theme-toggle i');
+            if (theme === 'light') {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            
+            // Save theme preference
+            const theme = body.classList.contains('light-mode') ? 'light' : 'dark';
+            localStorage.setItem('theme', theme);
+            
+            // Update icon
+            updateThemeIcon(theme);
+            
+            // Add rotation animation
+            themeToggle.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                themeToggle.style.transform = '';
+            }, 400);
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.querySelector('.sidebar');
+        
+        mobileMenuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // Mobile Navigation Active State
+        const mobileNavItems = document.querySelectorAll('.nav-mobile-item');
+        
+        mobileNavItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                mobileNavItems.forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Desktop Navigation Active State
+        const desktopNavItems = document.querySelectorAll('.nav-link');
+        
+        desktopNavItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                desktopNavItems.forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Close sidebar on mobile after clicking a link
+                if (window.innerWidth < 992) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        });
+
+        // Charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tickets Chart
+            const ticketsCtx = document.getElementById('ticketsChart').getContext('2d');
+            const ticketsChart = new Chart(ticketsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Sáb', 'Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
+                    datasets: [{
+                        label: 'Tickets Vendidos',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        backgroundColor: 'rgba(27, 117, 188, 0.7)',
+                        borderColor: 'rgba(27, 117, 188, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Events Chart
+            const eventsCtx = document.getElementById('eventsChart').getContext('2d');
+            const eventsChart = new Chart(eventsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Website', 'Ticketmaster', 'Eventbrite'],
+                    datasets: [{
+                        data: [55, 25, 20],
+                        backgroundColor: [
+                            'rgba(27, 117, 188, 0.7)',
+                            'rgba(139, 92, 246, 0.7)',
+                            'rgba(59, 130, 246, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(27, 117, 188, 1)',
+                            'rgba(139, 92, 246, 1)',
+                            'rgba(59, 130, 246, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        });
+    </script>
+</body>
+</html>
